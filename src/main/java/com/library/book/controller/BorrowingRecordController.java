@@ -4,6 +4,8 @@ import com.library.book.dto.BorrowingRecordDTO;
 import com.library.book.service.BorrowingRecordService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,28 +18,32 @@ public class BorrowingRecordController {
     private BorrowingRecordService recordService;
 
     @PostMapping("/add")
-    public BorrowingRecordDTO addRecord(@Valid @RequestBody BorrowingRecordDTO dto) {
-        return recordService.save(dto);
+    public ResponseEntity<BorrowingRecordDTO> addRecord(@Valid @RequestBody BorrowingRecordDTO dto) {
+        BorrowingRecordDTO saved = recordService.save(dto);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<BorrowingRecordDTO> getAllRecords() {
-        return recordService.findAll();
+    public ResponseEntity<List<BorrowingRecordDTO>> getAllRecords() {
+        List<BorrowingRecordDTO> list = recordService.findAll();
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public BorrowingRecordDTO getRecord(@PathVariable Long id) {
-        return recordService.findById(id);
+    public ResponseEntity<BorrowingRecordDTO> getRecord(@PathVariable Long id) {
+        BorrowingRecordDTO record = recordService.findById(id);
+        return ResponseEntity.ok(record);
     }
 
     @PutMapping("/edit/{id}")
-    public BorrowingRecordDTO updateRecord(@PathVariable Long id, @Valid @RequestBody BorrowingRecordDTO dto) {
-        return recordService.update(id, dto);
+    public ResponseEntity<BorrowingRecordDTO> updateRecord(@PathVariable Long id, @Valid @RequestBody BorrowingRecordDTO dto) {
+        BorrowingRecordDTO updated = recordService.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteRecord(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRecord(@PathVariable Long id) {
         recordService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
-

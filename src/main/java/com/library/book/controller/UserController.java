@@ -4,6 +4,7 @@ import com.library.book.dto.UserDTO;
 import com.library.book.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,27 +17,32 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/add")
-    public UserDTO addUser(@Valid @RequestBody UserDTO dto) {
-        return userService.save(dto);
+    public ResponseEntity<UserDTO> addUser(@Valid @RequestBody UserDTO dto) {
+        UserDTO savedUser = userService.save(dto);
+        return ResponseEntity.ok(savedUser);
     }
 
     @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userService.findAll();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.findAll();
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUser(@PathVariable Long id) {
-        return userService.findById(id);
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+        UserDTO user = userService.findById(id);
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/edit/{id}")
-    public UserDTO updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO dto) {
-        return userService.update(id, dto);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO dto) {
+        UserDTO updatedUser = userService.update(id, dto);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

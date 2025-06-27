@@ -3,10 +3,8 @@ package com.library.book.controller;
 import com.library.book.dto.FineDTO;
 import com.library.book.service.FineService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,7 +16,8 @@ public class FineController {
     private FineService fineService;
 
     @GetMapping("/user/{userId}")
-    public List<FineDTO> getFinesForUser(@PathVariable Long userId) {
-        return fineService.getUnpaidFinesForUser(userId);
+    public ResponseEntity<List<FineDTO>> getFinesForUser(@PathVariable Long userId) {
+        List<FineDTO> fines = fineService.getUnpaidFinesForUser(userId);
+        return ResponseEntity.ok(fines);
     }
 }
